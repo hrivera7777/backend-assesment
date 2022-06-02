@@ -63,17 +63,22 @@ def populate_itineraries(itineraries):
     for itinerary in itineraries:
         itinerary_c = copy.deepcopy(itinerary)
         legs = itinerary_c.pop("legs")
-        agent_data = {
-            "name": itinerary_c.pop("agent"),
-            "rating": itinerary_c.pop("agent_rating")
-        }
-        agent = Agent(**agent_data)
-        agent.save()
+        agent_name = itinerary_c.pop("agent")
+        agent_rating = itinerary_c.pop("agent_rating")
+        try:
+            agent = Agent.objects.get(name=agent_name)
+        except Agent.DoesNotExist:
+            agent_data = {
+                "name": agent_name,
+                "rating": agent_rating
+            }
+            agent = Agent(**agent_data)
+            agent.save()
+
         itinerary_c = {
             **itinerary_c,
             "agent": agent
         }
-
         itinerary_created = Itinerary(**itinerary_c)
         itinerary_created.save()
 
