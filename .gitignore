@@ -1,0 +1,3 @@
+*.pyc
+flights/flights/__pycache__
+flights/logic/__pycache__
